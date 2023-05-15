@@ -12,32 +12,25 @@ class ChiTieuController extends Controller
         return view("welcome", compact("data"));
     }
 
-    public function add()
-    {
-        return view("add");
-    }
+    
     public function postAdd(Request $request)
     {
         $request->validate([
-            "price" => "required|integer",
-            "type_price" => "required",
+            "price" => "required",
             "content" => "required"
         ]);
         DB::table("chitieu")->insert([
             "price" => $request->price,
             "type_price" => $request->price_type,
-            "content" => $request->content
+            "content" => $request->content,
+            "created_at" => date("Y-m-d")
         ]);
         return redirect("/");
     }
     public function search(Request $request)
     {
-        $request->validate([
-            "date" => "required|integer"
-        ], [
-            "date.integer" => "integer"
-        ]);
-        $data = DB::table("chitieu")->whereDay("created_at", "=", $request->date)->get();
+      
+        $data = DB::table("chitieu")->whereDate("created_at", "=", $request->date)->get();
         return view("welcome", compact("data"));
     }
 }
